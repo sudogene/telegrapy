@@ -36,3 +36,20 @@ Telegram Objects in telegrapy are object-oriented implementation of [JSON-object
 ---
 
 ### Creating Bot Commands
+All messages received by the bot are parsed and handled by the `Handler` class which is attached to the Bot upon creation. You can create your handler functions using the function signature `def function_name(msg: telegrapy.Message)` where all functions MUST take in the `Message` object. A code example:
+```
+def echo(msg):
+  chat_id = msg.chat_id
+  text = msg.text
+  bot.send_message(chat_id, text)
+```
+Defined handler functions can then be added to the bot's handler:
+```
+# get the handelr
+handler = bot.handler
+
+# add the function
+handler.add_command('echo', echo)
+```
+Adding of commands to the handler requires two arguments; 1. the command string which will trigger the function. 2. the function.
+
