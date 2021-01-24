@@ -22,6 +22,16 @@ bot = telegrapy.Bot(token)
 print(bot.get_me())
 ```
 
+3. Set bot to run in a loop and keep program alive
+```
+bot.run()
+print('Running...')
+
+while True:
+  time.sleep(3)
+```
+When the bot runs, it indefinitely checks for message updates and handles them (if any handler function is implemented).
+
 Quick example on an echo bot can be found in [example.py](example.py).
 
 ---
