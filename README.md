@@ -22,6 +22,8 @@ bot = telegrapy.Bot(token)
 print(bot.get_me())
 ```
 
+Quick example on an echo bot can be found in [example.py](example.py).
+
 ---
 
 ### Telegram Objects
