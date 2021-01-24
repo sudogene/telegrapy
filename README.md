@@ -1,6 +1,6 @@
 # telegrapy
 
-telegrapy is a package for easy building of Bots using the [Telegram Bot API](https://core.telegram.org/bots). 
+telegrapy is a package for easy building of bots using the [Telegram Bot API](https://core.telegram.org/bots). 
 
 ---
 
@@ -40,6 +40,7 @@ Quick example on an echo bot can be found in [example.py](example.py).
 Telegram Objects in telegrapy are object-oriented implementation of [JSON-objects](https://core.telegram.org/bots/api#available-types) in the Telegram API. They all have a unique identifier and their corresponding JSON. Hence, any object can return its own JSON format by calling the `.json` attribute.
 
 #### User
+
 
 #### Chat
 
