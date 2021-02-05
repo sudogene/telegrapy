@@ -14,7 +14,7 @@ class TelegramObject(object):
         return False
 
     def __hash__(self):
-        return hash(self.json)
+        return hash(self.id)
 
 
 class User(TelegramObject):
