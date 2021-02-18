@@ -9,7 +9,7 @@ class TelegramObject(object):
         self.json = json
 
     def __eq__(self, other):
-        if isinstance(self.__class__, other):
+        if isinstance(other, self.__class__):
             return other.id == self.id
         return False
 
