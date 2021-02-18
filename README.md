@@ -40,10 +40,10 @@ Quick example on an echo bot can be found in [example.py](example.py).
 Telegram Objects in telegrapy are object-oriented implementation of [JSON-objects](https://core.telegram.org/bots/api#available-types) in the Telegram API. Each object has a unique identifier (ID) and its corresponding JSON. Hence, any object can return its own JSON format by calling the `.json` attribute.
 
 #### User
-Based on Telegram [User](https://core.telegram.org/bots/api#user). These are typically senders of Message.
+Based on Telegram [User](https://core.telegram.org/bots/api#user). These are typically senders of `Message`.
 
 #### Chat
-Based on Telegram [Chat](https://core.telegram.org/bots/api#chat). They are subclassed into PrivateChat, GroupChat, and SupergroupChat. As of now, there are not many differences in terms of parsing messages from these chat types. Chat IDs are required for bots to send messages to.
+Based on Telegram [Chat](https://core.telegram.org/bots/api#chat). They are subclassed into `PrivateChat`, `GroupChat`, and `SupergroupChat`. As of now, there are not many differences in terms of parsing messages from these chat types. Chat IDs are required for bots to send messages to.
 
 #### Message
 Based on Telegram [Message](https://core.telegram.org/bots/api#message). The main bulk of data necessary for bot interactions. Contains information of the date time, sender, chat, command, and text.
