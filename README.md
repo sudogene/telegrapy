@@ -89,7 +89,7 @@ Method | telegrapy.Bot function
 [sendDice](https://core.telegram.org/bots/api#senddice) | `send_dice`
 
 #### Optional Arguments for Bot Methods
-Some methods support additional arguments specific to use case. An example is `reply_to_message_id` which allows the bot's message to reply to a specific message. This requires the Message ID, which is conveniently available in the Message input for all handler functions.
+Some methods support additional arguments specific to use case. An example is `reply_to_message_id` which allows the bot's message to reply to a specific message. This requires the Message ID, which is conveniently available in the `Message` input for all handler functions.
 ```
 # Direct reply to the sender's message
 def echo(msg):
