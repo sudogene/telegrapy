@@ -14,10 +14,10 @@ $ cd telegrapy
 
 2. Test your bot's account using the following code
 ```
-import telegrapy
+from telegrapy import Bot
 
 token = 'YOUR_TOKEN'
-bot = telegrapy.Bot(token)
+bot = Bot(token)
 
 print(bot.get_me())
 ```
@@ -30,26 +30,32 @@ print('Running...')
 while True:
   time.sleep(3)
 ```
-When the bot runs, it indefinitely checks for message updates and handles them (if any handler function is implemented).
+When the bot runs, it indefinitely checks for message updates and handles them.
 
 Quick example on an echo bot can be found in [example.py](example.py).
 
 ---
 
 ### Telegram Objects
-Telegram Objects in telegrapy are object-oriented implementation of [JSON-objects](https://core.telegram.org/bots/api#available-types) in the Telegram API. They all have a unique identifier and their corresponding JSON. Hence, any object can return its own JSON format by calling the `.json` attribute.
+Telegram Objects in telegrapy are object-oriented implementation of [JSON-objects](https://core.telegram.org/bots/api#available-types) in the Telegram API. Each object has a unique identifier (ID) and its corresponding JSON. Hence, any object can return its own JSON format by calling the `.json` attribute.
 
 #### User
-
+Based on Telegram [User](https://core.telegram.org/bots/api#user). These are typically senders of Message.
 
 #### Chat
+Based on Telegram [Chat](https://core.telegram.org/bots/api#chat). They are subclassed into PrivateChat, GroupChat, and SupergroupChat. As of now, there are not many differences in terms of parsing messages from these chat types. Chat IDs are required for bots to send messages to.
 
 #### Message
+Based on Telegram [Message](https://core.telegram.org/bots/api#message). The main bulk of data necessary for bot interactions. Contains information of the date time, sender, chat, command, and text.
 
 ---
 
 ### Creating Bot Commands
-All messages received by the bot are parsed and handled by the `Handler` class which is attached to the Bot upon creation. You can create your handler functions using the function signature `def function_name(msg: telegrapy.Message)` where all functions MUST take in the `Message` object. A code example:
+All messages received by the bot are parsed and handled by the `Handler` class which is attached to the Bot upon creation. You can create your handler functions using the function signature 
+```
+def function_name(msg: telegrapy.Message)
+```
+where all functions MUST take in the `Message` object. A code example:
 ```
 def echo(msg):
   chat_id = msg.chat_id
@@ -64,5 +70,5 @@ handler = bot.handler
 # add the function
 handler.add_command('echo', echo)
 ```
-Adding of commands to the handler requires two arguments; 1. the command string which will trigger the function. 2. the function.
+Adding of commands to the handler requires two arguments; the string command and the function.
 
