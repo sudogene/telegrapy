@@ -88,7 +88,8 @@ class Message(TelegramObject):
                  chat: Chat,
                  sender: Optional[User] = None,
                  text: Optional[str] = None,
-                 entities: Optional[list] = None):
+                 entities: Optional[list] = None,
+                 botname: str = ""):
 
         super().__init__(message_id, json)
         self.date = date
@@ -101,21 +102,21 @@ class Message(TelegramObject):
         if entities is not None:
             entity = next(filter(lambda e: 'bot_command' in e.values(), entities), None)
 
-        self.is_command = ""
+        self.command = ""
         self.text = text
 
         if entity is not None:
             offset = entity['offset']
             length = entity['length']
-            self.command = text[offset + 1: offset + length]
-            self.text = text[offset + length:]
+            self.command = text[offset + 1: offset + length].replace(botname, '')
+            self.text = text[offset + length:].strip()
             self.is_command = True
 
     def __repr__(self):
         return f'Message(id={self.id}, date={self.formatted_date}, ' + \
             f'sender={self.sender}, chat={self.chat}, ' + \
-            f'text={self.text if self.text else None}, ' + \
-            f'command={self.command if self.command else None})'
+            f'text={self.text}, ' + \
+            f'command={self.command})'
 
     @property
     def formatted_date(self):

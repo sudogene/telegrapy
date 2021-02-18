@@ -4,16 +4,11 @@ from .telegram import (
     PrivateChat,
     GroupChat,
     SupergroupChat,
-    Message
+    Message,
 )
+from .telegram_error import ParseException
 
-
-class ParseException(Exception):
-    def __init__(self, to_parse):
-        self.to_parse = to_parse
-
-    def __str__(self):
-        return f'Unable to parse {self.to_parse}.'
+from typing import Optional
 
 
 def parse_user(raw: dict) -> User:
@@ -47,7 +42,7 @@ def parse_chat(raw: dict) -> Chat:
         raise ParseException(raw)
 
 
-def parse_message(raw: dict) -> Message:
+def parse_message(raw: dict, botname: Optional[str] = None) -> Message:
     msg_id = raw['message_id']
     date = raw['date']
     chat = parse_chat(raw['chat'])
@@ -55,4 +50,4 @@ def parse_message(raw: dict) -> Message:
     text = raw['text'] if 'text' in raw else None
     entities = raw['entities'] if 'entities' in raw else None
     return Message(json=raw, message_id=msg_id, date=date, chat=chat,
-                   sender=sender, text=text, entities=entities)
+                   sender=sender, text=text, entities=entities, botname=botname)

@@ -1,12 +1,13 @@
 from .telegram_parser import parse_message
 from .telegram import Message
+from .telegram_error import InvalidTokenException
 
 from abc import ABC, abstractmethod
 import queue
-from threading import Thread
-from typing import Callable, Optional, Union, BinaryIO
 import requests
+from threading import Thread
 import time
+from typing import Callable, Optional, Union, BinaryIO
 
 
 class RunForeverAsThread(ABC):
@@ -19,10 +20,11 @@ class RunForeverAsThread(ABC):
 
 
 class Handler(RunForeverAsThread):
-    def __init__(self):
+    def __init__(self, username: str):
         self._inqueue = queue.Queue()
         self._commands = {}
         self._messages = {}
+        self._username = username
 
     @property
     def inqueue(self):
@@ -58,8 +60,8 @@ class Handler(RunForeverAsThread):
     def run_forever(self):
         while True:
             m = self._inqueue.get(block=True)
-            msg = parse_message(m)
-            # log message here
+            msg = parse_message(m, botname=self._username)
+            # log message here?
             if msg.is_command:
                 handler = self.get_command_handler(msg)
             else:
@@ -81,7 +83,9 @@ class Updater(RunForeverAsThread):
 
             if result:
                 for update in result:
-                    self._handler.inqueue.put(update['message'])
+                    msg = update.get('message', None)
+                    if msg is not None:
+                        self._handler.inqueue.put(msg)
                     offset = update['update_id'] + 1
 
             time.sleep(wait)
@@ -91,7 +95,12 @@ class Bot:
     def __init__(self, token: str):
         self._token = token
         self._base_url = f'https://api.telegram.org/bot{self._token}'
-        self._handler = Handler()
+
+        get_me = self.get_me()
+        if not get_me:
+            raise InvalidTokenException(self._token)
+
+        self._handler = Handler('@' + get_me['result']['username'])
         self._updater = Updater(self, self._handler)
 
     @property
