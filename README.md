@@ -51,7 +51,7 @@ Based on Telegram [Message](https://core.telegram.org/bots/api#message). The mai
 ---
 
 ### Creating Bot Commands
-All messages received by the bot are parsed and handled by the `Handler` class which is attached to the Bot upon creation. You can create your handler functions using the function signature 
+Bot commands are special text/phrases recognized by bots as commands, and trigger bots to call functions defined by the user. All messages received by the bot are parsed and handled by the `Handler` class which is attached to the Bot upon creation. You can create your handler functions using the function signature 
 ```
 def function_name(msg: telegrapy.Message)
 ```
@@ -72,3 +72,32 @@ handler.add_command('echo', echo)
 ```
 Adding of commands to the handler requires two arguments; the string command and the function.
 
+---
+
+### Bot Methods
+Not to be confused with bot commands. Bot methods are GET and POST HTTP methods based on Telegram [Available Methods](https://core.telegram.org/bots/api#available-methods). As of now, the following methods have been implemented in this library:
+
+Method | telegrapy.Bot function
+-------- | --------
+[getMe](https://core.telegram.org/bots/api#getme) | `get_me`
+[sendMessage](https://core.telegram.org/bots/api#sendmessage) | `send_message`
+[sendPhoto](https://core.telegram.org/bots/api#sendphoto) | `send_photo`
+[sendAudio](https://core.telegram.org/bots/api#sendaudio) | `send_audio`
+[sendDocument](https://core.telegram.org/bots/api#senddocument) | `send_document`
+[sendVideo](https://core.telegram.org/bots/api#sendvideo) | `send_video`
+[sendVoice](https://core.telegram.org/bots/api#sendvoice) | `send_voice`
+[sendDice](https://core.telegram.org/bots/api#senddice) | `send_dice`
+
+#### Optional Arguments for Bot Methods
+Some methods support additional arguments specific to use case. An example is `reply_to_message_id` which allows the bot's message to reply to a specific message. This requires the Message ID, which is conveniently available in the Message input for all handler functions.
+```
+# Direct reply to the sender's message
+def echo(msg):
+  chat_id = msg.chat_id
+  text = msg.text
+  bot.send_message(chat_id, text, reply_to_message_id=msg.id)
+
+bot.handler.add_command('echo', echo)
+```
+
+... More to be added
