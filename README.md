@@ -1,6 +1,6 @@
-# telegrapy
+# Telegrapy
 
-telegrapy is a package for easy building of bots using the [Telegram Bot API](https://core.telegram.org/bots). 
+Telegrapy is a package for easy building of bots using the [Telegram Bot API](https://core.telegram.org/bots). 
 
 ---
 
