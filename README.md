@@ -27,6 +27,7 @@ print(bot.get_me())
 
 3. Set bot to run in a loop and keep program alive
 ```
+
 bot.run()
 print('Running...')
 
