@@ -5,17 +5,16 @@ Telegrapy is a package for easy building of bots using the [Telegram Bot API](ht
 ---
 
 ### How to start
-1. Clone the repo
+1. Install package using pip
+```
+$ pip3 install telegrapy
+```
+ALTERNATIVE: Clone the repo
 ```
 $ cd PATH_OF_YOUR_CHOICE
 $ git clone https://github.com/sudogene/telegrapy.git
 $ cd telegrapy
 ```
-OR install package
-```
-$ pip3 install telegrapy
-```
-
 2. Test your bot's account using the following code
 ```
 from telegrapy import Bot
