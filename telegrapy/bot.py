@@ -3,6 +3,7 @@ from .telegram import Message
 from .telegram_error import InvalidTokenException
 
 from abc import ABC, abstractmethod
+import io
 import queue
 import requests
 from threading import Thread
@@ -100,7 +101,7 @@ class Bot:
         if not get_me:
             raise InvalidTokenException(self._token)
 
-        self._handler = Handler('@' + get_me['result']['username'])
+        self._handler = Handler(get_me['result']['username'])
         self._updater = Updater(self, self._handler)
 
     @property
@@ -133,19 +134,24 @@ class Bot:
 
     def send_message(self, chat_id: Union[str, int],
                      text: str,
-                     reply_to_message_id: Union[str, int, None] = None):
+                     reply_to_message_id: Union[str, int, None] = None,
+                     parse_mode: Optional[str] = None):
         """ https://core.telegram.org/bots/api#sendmessage """
+
+        if parse_mode is not None:
+            assert parse_mode in ('Markdown', 'MarkdownV2', 'HTML')
 
         data = {
             'chat_id': chat_id,
             'text': text,
-            'reply_to_message_id': reply_to_message_id
+            'reply_to_message_id': reply_to_message_id,
+            'parse_mode': parse_mode
         }
 
         return self._post('sendMessage', data)
 
     def send_photo(self, chat_id: Union[str, int],
-                   photo: Union[str, BinaryIO],
+                   photo: Union[str, io.BufferedReader, BinaryIO],
                    caption: str = None,
                    reply_to_message_id: Union[str, int, None] = None):
         """ https://core.telegram.org/bots/api#sendphoto """
@@ -154,20 +160,24 @@ class Bot:
             'chat_id': chat_id,
             'caption': caption,
             'reply_to_message_id': reply_to_message_id,
-            'photo': photo
         }
 
-        files = {'photo': photo}
+        files = {}
+
+        if isinstance(photo, str):
+            data['photo'] = photo
+        else:
+            files['photo'] = photo
 
         return self._post('sendPhoto', data=data, files=files)
 
     def send_audio(self, chat_id: Union[str, int],
-                   audio: Union[str, BinaryIO],
+                   audio: Union[str, io.BufferedReader],
                    caption: str = None,
                    duration: Optional[int] = None,
                    performer: Optional[str] = None,
                    title: Optional[str] = None,
-                   thumb: Union[str, BinaryIO, None] = None,
+                   thumb: Union[str, io.BufferedReader, BinaryIO, None] = None,
                    reply_to_message_id: Union[str, int, None] = None):
         """ https://core.telegram.org/bots/api#sendaudio"""
 
@@ -178,17 +188,25 @@ class Bot:
             'performer': performer,
             'title': title,
             'reply_to_message_id': reply_to_message_id,
-            'audio': audio,
-            'thumb': thumb
         }
 
-        files = {'audio': audio, 'thumb': thumb}
+        files = {}
+
+        if isinstance(audio, str):
+            data['audio'] = audio
+        else:
+            files['audio'] = audio
+
+        if isinstance(thumb, str):
+            data['thumb'] = thumb
+        else:
+            files['thumb'] = thumb
 
         return self._post('sendAudio', data=data, files=files)
 
     def send_document(self, chat_id: Union[str, int],
-                      document: Union[str, BinaryIO],
-                      thumb: Union[str, BinaryIO, None] = None,
+                      document: Union[str, io.BufferedReader, BinaryIO],
+                      thumb: Union[str, io.BufferedReader, BinaryIO, None] = None,
                       caption: str = None,
                       reply_to_message_id: Union[str, int] = None):
         """ https://core.telegram.org/bots/api#senddocument """
@@ -197,20 +215,28 @@ class Bot:
             'chat_id': chat_id,
             'caption': caption,
             'reply_to_message_id': reply_to_message_id,
-            'document': document,
-            'thumb': thumb
         }
 
-        files = {'document': document, 'thumb': thumb}
+        files = {}
+
+        if isinstance(document, str):
+            data['document'] = document
+        else:
+            files['document'] = document
+
+        if isinstance(thumb, str):
+            data['thumb'] = thumb
+        else:
+            files['thumb'] = thumb
 
         return self._post('sendDocument', data=data, files=files)
 
     def send_video(self, chat_id: Union[str, int],
-                   video: Union[str, BinaryIO],
+                   video: Union[str, io.BufferedReader, BinaryIO],
                    duration: Optional[int] = None,
                    width: Optional[int] = None,
                    height: Optional[int] = None,
-                   thumb: Union[str, BinaryIO, None] = None,
+                   thumb: Union[str, io.BufferedReader, BinaryIO, None] = None,
                    caption: Optional[str] = None,
                    reply_to_message_id: Union[str, int, None] = None):
         """ https://core.telegram.org/bots/api#sendvideo """
@@ -222,16 +248,24 @@ class Bot:
             'height': height,
             'caption': caption,
             'reply_to_message_id': reply_to_message_id,
-            'video': video,
-            'thumb': thumb
         }
 
-        files = {'video': video, 'thumb': thumb}
+        files = {}
+
+        if isinstance(video, str):
+            data['video'] = video
+        else:
+            files['video'] = video
+
+        if isinstance(thumb, str):
+            data['thumb'] = thumb
+        else:
+            files['thumb'] = thumb
 
         return self._post('sendVideo', data=data, files=files)
 
     def send_voice(self, chat_id: Union[str, int],
-                   voice: Union[str, BinaryIO],
+                   voice: Union[str, io.BufferedReader, BinaryIO],
                    caption: Optional[str] = None,
                    reply_to_message_id: Union[str, int, None] = None):
         """ https://core.telegram.org/bots/api#sendvoice """
@@ -240,10 +274,14 @@ class Bot:
             'chat_id': chat_id,
             'caption': caption,
             'reply_to_message_id': reply_to_message_id,
-            'voice': voice
         }
 
-        files = {'voice': voice}
+        files = {}
+
+        if isinstance(voice, str):
+            data['voice'] = voice
+        else:
+            files['voice'] = voice
 
         return self._post('sendVoice', data=data, files=files)
 
