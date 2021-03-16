@@ -130,7 +130,7 @@ class Bot:
         """ https://core.telegram.org/bots/api#getupdates """
         data = {'offset': offset}
         response = self._post('getUpdates', data=data)
-        return response['result']
+        return response.get('result', None)
 
     def send_message(self, chat_id: Union[str, int],
                      text: str,
